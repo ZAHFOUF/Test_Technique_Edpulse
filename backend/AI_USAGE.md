@@ -155,3 +155,28 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - Aucune suggestion n'a été rejetée lors de cette phase.
+
+
+## Phase 7 – In-Memory Cache
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le plan d'implémentation d'un service de cache en mémoire.
+- Intégrer le `CacheService` au `ProductsService` afin d'optimiser les requêtes répétées.
+- Ajouter des journaux (`Logger`) pour distinguer explicitement les événements **Cache HIT**, **Cache MISS**, **Cache SET** et **Cache EXPIRED** afin de faciliter la vérification et le débogage du fonctionnement du cache.
+- Mettre en place un mécanisme de nettoyage automatique des entrées expirées à l'aide d'un intervalle configurable (`setInterval`), en complément de la vérification du TTL lors de l'accès au cache.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan d'implémentation généré avant le développement.
+- J'ai utilisé le plan validé comme guide pour implémenter le `CacheService` et son intégration dans le `ProductsService`.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette phase.
+
+Example of logs:
+
+[Nest] 7040  - 29/07/2026 05:50:03   DEBUG [CacheService] MISS products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}
+[Nest] 7040  - 29/07/2026 05:50:03   DEBUG [CacheService] SET products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}
+[Nest] 7040  - 29/07/2026 05:50:10   DEBUG [CacheService] HIT products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CacheService } from '../../cache/cache.service';
 import { products } from './data/products.data';
 import { ProductQueryDto } from './dto/product-query.dto';
 import { PaginatedProducts } from './interfaces/paginated-products.interface';
@@ -8,8 +9,18 @@ import { Product } from './interfaces/product.interface';
 export class ProductsService {
   private readonly defaultPage = 1;
   private readonly defaultLimit = 10;
+  private readonly cacheKeyPrefix = 'products:findAll';
+
+  constructor(private readonly cacheService: CacheService) {}
 
   findAll(query: ProductQueryDto): PaginatedProducts {
+    const cacheKey = this.buildCacheKey(query);
+
+    const cached = this.cacheService.get<PaginatedProducts>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const page = query.page ?? this.defaultPage;
     const limit = query.limit ?? this.defaultLimit;
 
@@ -20,7 +31,27 @@ export class ProductsService {
     const offset = (page - 1) * limit;
     const data = filtered.slice(offset, offset + limit);
 
-    return { data, total, page, limit, totalPages };
+    const result: PaginatedProducts = {
+      data,
+      total,
+      page,
+      limit,
+      totalPages,
+    };
+
+    this.cacheService.set(cacheKey, result);
+
+    return result;
+  }
+
+  private buildCacheKey(query: ProductQueryDto): string {
+    const normalized = {
+      page: query.page ?? this.defaultPage,
+      limit: query.limit ?? this.defaultLimit,
+      category: query.category ?? null,
+      stock_status: query.stock_status ?? null,
+    };
+    return `${this.cacheKeyPrefix}:${JSON.stringify(normalized)}`;
   }
 
   private applyFilters(
