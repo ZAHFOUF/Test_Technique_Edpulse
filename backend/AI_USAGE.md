@@ -85,3 +85,21 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - Aucune suggestion n'a été rejetée lors de cette phase.
+
+
+## Phase 3 – Query DTO
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le DTO de validation des paramètres de requête pour l'endpoint `GET /products`.
+- Produire un plan d'implémentation avant le développement.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan d'implémentation généré (`phase_3_query_dto_cc48735a.plan.md`) avant le développement.
+- Après validation du plan, j'ai demandé une amélioration afin d'ajouter des contraintes de longueur maximale pour les champs texte (`category`) en complément de la validation des types et des paramètres numériques.
+- J'ai utilisé le plan validé comme guide pour l'implémentation du DTO.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette phase.
