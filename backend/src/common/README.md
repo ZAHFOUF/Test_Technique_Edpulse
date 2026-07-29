@@ -13,14 +13,12 @@ application: pieces that do not belong to any single feature.
 
 ## Current subdirectories
 
-- `filters/` — reserved for exception filters (see below). Empty for Phase 1
-  because no filter file has been requested yet.
+- `filters/` — hosts `HttpExceptionFilter`, the global filter that turns
+  every thrown exception (validation errors, `HttpException`s, unexpected
+  runtime failures) into a consistent JSON envelope. See `filters/README.md`.
 
 ## Files added in future phases
 
-- `filters/http-exception.filter.ts` — a global `@Catch()` filter that
-  produces consistent HTTP error responses without leaking internals, as
-  required by the project rules.
 - Optionally later: `interceptors/`, `pipes/`, `decorators/` if the API grows
   and shared primitives emerge.
 

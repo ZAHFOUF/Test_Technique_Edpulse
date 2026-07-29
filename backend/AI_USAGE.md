@@ -138,3 +138,20 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - Je n'ai pas activé le `ValidationPipe` durant cette phase. Cette configuration sera réalisée dans la phase dédiée à la validation globale et à la gestion des exceptions.
+
+## Phase 6 – Exception Handling
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le plan d'implémentation de la gestion globale des exceptions et de la validation des requêtes.
+- Configurer un `ValidationPipe` global et un `HttpExceptionFilter` conformément aux bonnes pratiques NestJS.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan d'implémentation généré (`phase_6_exception_handling_a1be69f4.plan.md`) avant le développement.
+- J'ai utilisé le plan validé comme guide pour implémenter le `ValidationPipe` global et le `HttpExceptionFilter`.
+- J'ai centralisé la validation et la gestion des erreurs dans `main.ts` et `common/filters`, sans modifier la logique métier du contrôleur ou du service.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette phase.
