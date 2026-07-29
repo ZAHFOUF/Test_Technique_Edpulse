@@ -19,3 +19,9 @@ Avant de développer les fonctionnalités du frontend, j'ai défini l'architectu
 J'ai également demandé à l'IA de configurer le backend NestJS afin d'activer la politique CORS pour permettre au frontend React de communiquer avec l'API pendant le développement.
 
 L'IA a uniquement assisté la mise en place de l'infrastructure technique de l'application, sans implémenter les fonctionnalités métier ni l'interface utilisateur.
+
+# Phase 2 — Products Table
+
+Après avoir mis en place la communication avec l'API, j'ai défini les exigences de l'interface utilisateur pour l'affichage des produits, notamment la structure du tableau, les informations à présenter, les états de chargement, d'erreur et de liste vide, ainsi que les principes de responsive design et d'expérience utilisateur.
+
+À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `ProductTable` en React avec Tailwind CSS, en appliquant les bonnes pratiques d'accessibilité, de responsive design et de séparation entre la logique métier et la couche de présentation.
