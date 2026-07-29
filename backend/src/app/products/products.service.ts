@@ -50,6 +50,7 @@ export class ProductsService {
       limit: query.limit ?? this.defaultLimit,
       category: query.category ?? null,
       stock_status: query.stock_status ?? null,
+      name: query.name?.toLowerCase() ?? null,
     };
     return `${this.cacheKeyPrefix}:${JSON.stringify(normalized)}`;
   }
@@ -58,6 +59,8 @@ export class ProductsService {
     source: readonly Product[],
     query: ProductQueryDto,
   ): Product[] {
+    const nameNeedle = query.name?.toLowerCase();
+
     return source.filter((product) => {
       if (query.category !== undefined && product.category !== query.category) {
         return false;
@@ -65,6 +68,12 @@ export class ProductsService {
       if (
         query.stock_status !== undefined &&
         product.stock_status !== query.stock_status
+      ) {
+        return false;
+      }
+      if (
+        nameNeedle !== undefined &&
+        !product.name.toLowerCase().includes(nameNeedle)
       ) {
         return false;
       }

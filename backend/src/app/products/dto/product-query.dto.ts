@@ -31,4 +31,9 @@ export class ProductQueryDto {
   @IsEnum(StockStatus)
   @MaxLength(100)
   stock_status?: StockStatus;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(150)
+  name?: string;
 }

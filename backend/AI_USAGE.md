@@ -180,3 +180,21 @@ Example of logs:
 [Nest] 7040  - 29/07/2026 05:50:03   DEBUG [CacheService] MISS products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}
 [Nest] 7040  - 29/07/2026 05:50:03   DEBUG [CacheService] SET products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}
 [Nest] 7040  - 29/07/2026 05:50:10   DEBUG [CacheService] HIT products:findAll:{"page":1,"limit":10,"category":null,"stock_status":null}
+
+
+## # Update — Add Product Name Filtering
+
+### Ce que j'ai demandé à Cursor (Agent Mode)
+
+- Ajouter le paramètre `name` au `ProductQueryDto` avec les validations appropriées.
+- Implémenter un filtrage partiel insensible à la casse (`includes()` + `toLowerCase()`) dans le `ProductsService`.
+- Mettre à jour la génération de la clé du cache afin d'inclure le paramètre `name` et garantir qu'une entrée de cache corresponde à une combinaison unique de paramètres de recherche.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan proposé avant l'implémentation.
+- J'ai utilisé le plan comme guide pour étendre le DTO, le service et la logique de génération de la clé du cache, tout en conservant l'architecture existante.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette modification.
