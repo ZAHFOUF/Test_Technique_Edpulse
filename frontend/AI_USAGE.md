@@ -25,3 +25,9 @@ L'IA a uniquement assisté la mise en place de l'infrastructure technique de l'a
 Après avoir mis en place la communication avec l'API, j'ai défini les exigences de l'interface utilisateur pour l'affichage des produits, notamment la structure du tableau, les informations à présenter, les états de chargement, d'erreur et de liste vide, ainsi que les principes de responsive design et d'expérience utilisateur.
 
 À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `ProductTable` en React avec Tailwind CSS, en appliquant les bonnes pratiques d'accessibilité, de responsive design et de séparation entre la logique métier et la couche de présentation.
+
+# Phase 3 — Product Filters
+
+Après avoir implémenté l'affichage des produits, j'ai défini les exigences relatives au filtrage côté serveur, notamment l'utilisation d'un menu déroulant pour les catégories, de boutons avec icônes pour le statut de stock, ainsi que les interactions avec l'API et les principes d'expérience utilisateur.
+
+À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `ProductFilters`, intégrer les contrôles de filtrage avec le `ProductService` et concevoir une interface moderne et responsive avec Tailwind CSS, tout en respectant la séparation entre la logique métier et la présentation.
