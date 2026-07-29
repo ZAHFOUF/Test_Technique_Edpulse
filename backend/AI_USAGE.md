@@ -198,3 +198,22 @@ Example of logs:
 ### Ce que j'ai rejeté
 
 - Aucune suggestion n'a été rejetée lors de cette modification.
+
+
+## Phase 9 – End-to-End Testing
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer un plan pour mettre en place des tests End-to-End (E2E) avec Jest et Supertest.
+- Configurer le projet afin de prendre en charge l'exécution des tests E2E (`npm run test:e2e`).
+- Ajouter les dépendances et les fichiers de configuration nécessaires si ceux-ci n'étaient pas déjà présents.
+- Générer une suite de tests couvrant les principales fonctionnalités de l'API : récupération des produits, pagination, filtres, validation des requêtes et comportement du cache.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan proposé avant l'implémentation.
+- J'ai utilisé le plan comme guide pour configurer l'environnement de tests et créer une suite de tests E2E vérifiant le comportement de l'application à travers les endpoints HTTP.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette phase.
