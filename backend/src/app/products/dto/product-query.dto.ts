@@ -7,9 +7,9 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { StockStatus } from '../enums/stock-status.enum';
+import { ProductFilters, StockStatus } from '@shared';
 
-export class ProductQueryDto {
+export class ProductQueryDto implements ProductFilters {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
@@ -29,11 +29,10 @@ export class ProductQueryDto {
 
   @IsOptional()
   @IsEnum(StockStatus)
-  @MaxLength(100)
-  stock_status?: StockStatus;
+  stockStatus?: StockStatus;
 
   @IsOptional()
   @IsString()
   @MaxLength(150)
-  name?: string;
+  search?: string;
 }

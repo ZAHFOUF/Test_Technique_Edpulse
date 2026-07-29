@@ -1,25 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import type { PaginatedProducts } from '@shared';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter';
-
-interface ProductResponse {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  stock_status: 'in_stock' | 'low_stock' | 'out_of_stock';
-}
-
-interface PaginatedResponse {
-  data: ProductResponse[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
 
 interface ErrorResponse {
   statusCode: number;
@@ -59,7 +44,7 @@ describe('Products (e2e)', () => {
   describe('GET /products - retrieval', () => {
     it('returns 200 with a paginated envelope', async () => {
       const res = await request(httpServer).get('/products').expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body).toMatchObject({
         page: 1,
@@ -70,7 +55,7 @@ describe('Products (e2e)', () => {
 
     it('exposes data, total, page, limit, totalPages fields', async () => {
       const res = await request(httpServer).get('/products').expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body).toHaveProperty('data');
       expect(body).toHaveProperty('total');
@@ -81,7 +66,7 @@ describe('Products (e2e)', () => {
 
     it('each product item has the expected shape', async () => {
       const res = await request(httpServer).get('/products').expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.data.length).toBeGreaterThan(0);
       for (const product of body.data) {
@@ -91,7 +76,7 @@ describe('Products (e2e)', () => {
             name: expect.any(String),
             category: expect.any(String),
             price: expect.any(Number),
-            stock_status: expect.stringMatching(
+            stockStatus: expect.stringMatching(
               /^(in_stock|low_stock|out_of_stock)$/,
             ),
           }),
@@ -101,7 +86,7 @@ describe('Products (e2e)', () => {
 
     it('total equals 20 when no filter is applied', async () => {
       const res = await request(httpServer).get('/products').expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(20);
       expect(body.totalPages).toBe(2);
@@ -111,7 +96,7 @@ describe('Products (e2e)', () => {
   describe('pagination', () => {
     it('defaults to page=1 limit=10', async () => {
       const res = await request(httpServer).get('/products').expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.page).toBe(1);
       expect(body.limit).toBe(10);
@@ -123,7 +108,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ page: 1 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.page).toBe(1);
       expect(body.data).toHaveLength(10);
@@ -135,7 +120,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ limit: 5 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.limit).toBe(5);
       expect(body.data).toHaveLength(5);
@@ -147,7 +132,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ page: 2, limit: 5 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.page).toBe(2);
       expect(body.limit).toBe(5);
@@ -159,7 +144,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ page: 999, limit: 10 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.data).toEqual([]);
       expect(body.total).toBe(20);
@@ -174,7 +159,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ category: 'Electronics' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(5);
       expect(body.data.every((p) => p.category === 'Electronics')).toBe(true);
@@ -185,7 +170,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ category: 'Books' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(1);
       expect(body.data).toHaveLength(1);
@@ -197,7 +182,7 @@ describe('Products (e2e)', () => {
         .get('/products')
         .query({ category: 'DoesNotExist' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.data).toEqual([]);
       expect(body.total).toBe(0);
@@ -205,72 +190,72 @@ describe('Products (e2e)', () => {
     });
   });
 
-  describe('stock_status filtering', () => {
-    it('?stock_status=in_stock returns only in-stock items', async () => {
+  describe('stockStatus filtering', () => {
+    it('?stockStatus=in_stock returns only in-stock items', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ stock_status: 'in_stock', limit: 50 })
+        .query({ stockStatus: 'in_stock', limit: 50 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(12);
-      expect(body.data.every((p) => p.stock_status === 'in_stock')).toBe(true);
+      expect(body.data.every((p) => p.stockStatus === 'in_stock')).toBe(true);
     });
 
-    it('?stock_status=low_stock returns 4 items', async () => {
+    it('?stockStatus=low_stock returns 4 items', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ stock_status: 'low_stock', limit: 50 })
+        .query({ stockStatus: 'low_stock', limit: 50 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(4);
-      expect(body.data.every((p) => p.stock_status === 'low_stock')).toBe(true);
+      expect(body.data.every((p) => p.stockStatus === 'low_stock')).toBe(true);
     });
 
-    it('?stock_status=out_of_stock returns 4 items', async () => {
+    it('?stockStatus=out_of_stock returns 4 items', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ stock_status: 'out_of_stock', limit: 50 })
+        .query({ stockStatus: 'out_of_stock', limit: 50 })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(4);
-      expect(body.data.every((p) => p.stock_status === 'out_of_stock')).toBe(
+      expect(body.data.every((p) => p.stockStatus === 'out_of_stock')).toBe(
         true,
       );
     });
   });
 
-  describe('name filtering (partial, case-insensitive)', () => {
-    it('?name=phone matches Headphones with a lowercase input', async () => {
+  describe('search filtering (partial, case-insensitive)', () => {
+    it('?search=phone matches Headphones with a lowercase input', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ name: 'phone' })
+        .query({ search: 'phone' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(1);
       expect(body.data[0].name.toLowerCase()).toContain('phone');
     });
 
-    it('?name=PHONE returns the same result (case-insensitive)', async () => {
+    it('?search=PHONE returns the same result (case-insensitive)', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ name: 'PHONE' })
+        .query({ search: 'PHONE' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(1);
       expect(body.data[0].name.toLowerCase()).toContain('phone');
     });
 
-    it('?name=Pro matches Wilson Pro Staff', async () => {
+    it('?search=Pro matches Wilson Pro Staff', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ name: 'Pro' })
+        .query({ search: 'Pro' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBeGreaterThanOrEqual(1);
       expect(
@@ -278,12 +263,12 @@ describe('Products (e2e)', () => {
       ).toBe(true);
     });
 
-    it('?name=iphone returns zero results', async () => {
+    it('?search=iphone returns zero results', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ name: 'iphone' })
+        .query({ search: 'iphone' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(0);
       expect(body.data).toEqual([]);
@@ -291,18 +276,18 @@ describe('Products (e2e)', () => {
   });
 
   describe('combined filters', () => {
-    it('?page=1&limit=5&category=Electronics&stock_status=in_stock&name=phone returns only the Sony headphones', async () => {
+    it('?page=1&limit=5&category=Electronics&stockStatus=in_stock&search=phone returns only the Sony headphones', async () => {
       const res = await request(httpServer)
         .get('/products')
         .query({
           page: 1,
           limit: 5,
           category: 'Electronics',
-          stock_status: 'in_stock',
-          name: 'phone',
+          stockStatus: 'in_stock',
+          search: 'phone',
         })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.page).toBe(1);
       expect(body.limit).toBe(5);
@@ -310,21 +295,21 @@ describe('Products (e2e)', () => {
       expect(body.data).toHaveLength(1);
       expect(body.data[0]).toMatchObject({
         category: 'Electronics',
-        stock_status: 'in_stock',
+        stockStatus: 'in_stock',
       });
       expect(body.data[0].name.toLowerCase()).toContain('phone');
     });
 
-    it('?category=Sports&stock_status=low_stock narrows down to Peloton', async () => {
+    it('?category=Sports&stockStatus=low_stock narrows down to Peloton', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ category: 'Sports', stock_status: 'low_stock' })
+        .query({ category: 'Sports', stockStatus: 'low_stock' })
         .expect(200);
-      const body = res.body as PaginatedResponse;
+      const body = res.body as PaginatedProducts;
 
       expect(body.total).toBe(1);
       expect(body.data[0].category).toBe('Sports');
-      expect(body.data[0].stock_status).toBe('low_stock');
+      expect(body.data[0].stockStatus).toBe('low_stock');
     });
   });
 
@@ -360,24 +345,24 @@ describe('Products (e2e)', () => {
         .expect(400);
     });
 
-    it('?stock_status=invalid returns 400', async () => {
+    it('?stockStatus=invalid returns 400', async () => {
       const res = await request(httpServer)
         .get('/products')
-        .query({ stock_status: 'invalid' })
+        .query({ stockStatus: 'invalid' })
         .expect(400);
       const body = res.body as ErrorResponse;
 
       const messages = Array.isArray(body.message)
         ? body.message.join(' ')
         : body.message;
-      expect(messages).toContain('stock_status');
+      expect(messages).toContain('stockStatus');
     });
 
-    it('?name=<151 chars> returns 400 (DTO MaxLength is 150)', async () => {
-      const oversizedName = 'a'.repeat(151);
+    it('?search=<151 chars> returns 400 (DTO MaxLength is 150)', async () => {
+      const oversizedSearch = 'a'.repeat(151);
       await request(httpServer)
         .get('/products')
-        .query({ name: oversizedName })
+        .query({ search: oversizedSearch })
         .expect(400);
     });
 
@@ -403,15 +388,13 @@ describe('Products (e2e)', () => {
           message: expect.anything(),
         }),
       );
-      // timestamp is ISO 8601
       expect(new Date(body.timestamp).toString()).not.toBe('Invalid Date');
     });
   });
 
   describe('cache verification', () => {
     it('two identical requests return the exact same body', async () => {
-      // Use a query no other test targets to isolate the cache entry.
-      const query = { category: 'Home & Garden', stock_status: 'in_stock' };
+      const query = { category: 'Home & Garden', stockStatus: 'in_stock' };
 
       const first = await request(httpServer)
         .get('/products')
@@ -437,7 +420,7 @@ describe('Products (e2e)', () => {
         .query(query)
         .expect(200);
 
-      for (const body of [first.body, second.body] as PaginatedResponse[]) {
+      for (const body of [first.body, second.body] as PaginatedProducts[]) {
         expect(body).toHaveProperty('data');
         expect(body).toHaveProperty('total');
         expect(body).toHaveProperty('page');

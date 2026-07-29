@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { PaginatedProducts, Product } from '@shared';
 import { CacheService } from '../../cache/cache.service';
 import { products } from './data/products.data';
 import { ProductQueryDto } from './dto/product-query.dto';
-import { PaginatedProducts } from './interfaces/paginated-products.interface';
-import { Product } from './interfaces/product.interface';
 
 @Injectable()
 export class ProductsService {
@@ -49,8 +48,8 @@ export class ProductsService {
       page: query.page ?? this.defaultPage,
       limit: query.limit ?? this.defaultLimit,
       category: query.category ?? null,
-      stock_status: query.stock_status ?? null,
-      name: query.name?.toLowerCase() ?? null,
+      stockStatus: query.stockStatus ?? null,
+      search: query.search?.toLowerCase() ?? null,
     };
     return `${this.cacheKeyPrefix}:${JSON.stringify(normalized)}`;
   }
@@ -59,21 +58,21 @@ export class ProductsService {
     source: readonly Product[],
     query: ProductQueryDto,
   ): Product[] {
-    const nameNeedle = query.name?.toLowerCase();
+    const searchNeedle = query.search?.toLowerCase();
 
     return source.filter((product) => {
       if (query.category !== undefined && product.category !== query.category) {
         return false;
       }
       if (
-        query.stock_status !== undefined &&
-        product.stock_status !== query.stock_status
+        query.stockStatus !== undefined &&
+        product.stockStatus !== query.stockStatus
       ) {
         return false;
       }
       if (
-        nameNeedle !== undefined &&
-        !product.name.toLowerCase().includes(nameNeedle)
+        searchNeedle !== undefined &&
+        !product.name.toLowerCase().includes(searchNeedle)
       ) {
         return false;
       }

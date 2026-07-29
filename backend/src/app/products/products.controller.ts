@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
+import type { PaginatedProducts } from '@shared';
 import { ProductQueryDto } from './dto/product-query.dto';
-import type { PaginatedProducts } from './interfaces/paginated-products.interface';
 import { ProductsService } from './products.service';
 
 @Controller('products')
