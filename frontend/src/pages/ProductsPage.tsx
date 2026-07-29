@@ -1,24 +1,36 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ProductFilters as ProductFiltersType } from '@shared';
 import { StockStatus } from '@shared';
 import { useProducts } from '../hooks/useProducts';
 import { useCategories } from '../hooks/useCategories';
 import ProductFilters from '../components/ProductFilters';
 import ProductTable from '../components/ProductTable';
+import Pagination from '../components/Pagination';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
 
+const INITIAL_FILTERS: ProductFiltersType = { page: 1 };
+
 function ProductsPage() {
-  const [filters, setFilters] = useState<ProductFiltersType>({});
+  const [filters, setFilters] = useState<ProductFiltersType>(INITIAL_FILTERS);
   const categories = useCategories();
   const { products, isLoading, error } = useProducts(filters);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const handleCategoryChange = (category?: string) => {
-    setFilters((prev) => ({ ...prev, category }));
+    setFilters((prev) => ({ ...prev, category, page: 1 }));
   };
 
   const handleStockStatusChange = (stockStatus?: StockStatus) => {
-    setFilters((prev) => ({ ...prev, stockStatus }));
+    setFilters((prev) => ({ ...prev, stockStatus, page: 1 }));
+  };
+
+  const handlePageChange = (page: number) => {
+    if (isLoading) {
+      return;
+    }
+    setFilters((prev) => ({ ...prev, page }));
+    resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -35,13 +47,23 @@ function ProductsPage() {
         onStockStatusChange={handleStockStatusChange}
       />
 
-      {isLoading && <LoadingSpinner />}
+      <div ref={resultsRef} className="flex scroll-mt-6 flex-col gap-6">
+        {isLoading && <LoadingSpinner />}
 
-      {!isLoading && error && <ErrorAlert message={error} />}
+        {!isLoading && error && <ErrorAlert message={error} />}
 
-      {!isLoading && !error && products && (
-        <ProductTable products={products.data} />
-      )}
+        {!isLoading && !error && products && (
+          <>
+            <ProductTable products={products.data} />
+            <Pagination
+              currentPage={products.page}
+              totalPages={products.totalPages}
+              onPageChange={handlePageChange}
+              isLoading={isLoading}
+            />
+          </>
+        )}
+      </div>
     </main>
   );
 }

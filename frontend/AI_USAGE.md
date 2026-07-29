@@ -31,3 +31,9 @@ Après avoir mis en place la communication avec l'API, j'ai défini les exigence
 Après avoir implémenté l'affichage des produits, j'ai défini les exigences relatives au filtrage côté serveur, notamment l'utilisation d'un menu déroulant pour les catégories, de boutons avec icônes pour le statut de stock, ainsi que les interactions avec l'API et les principes d'expérience utilisateur.
 
 À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `ProductFilters`, intégrer les contrôles de filtrage avec le `ProductService` et concevoir une interface moderne et responsive avec Tailwind CSS, tout en respectant la séparation entre la logique métier et la présentation.
+
+# Phase 4 — Pagination
+
+Après avoir implémenté l'affichage et le filtrage des produits, j'ai défini les exigences de la pagination côté serveur, notamment les contrôles de navigation, la synchronisation avec l'API, la conservation des filtres actifs et les bonnes pratiques d'expérience utilisateur.
+
+À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `Pagination`, intégrer la pagination avec le `ProductService` et concevoir une interface responsive avec Tailwind CSS, tout en respectant la séparation entre la logique métier et la couche de présentation.
