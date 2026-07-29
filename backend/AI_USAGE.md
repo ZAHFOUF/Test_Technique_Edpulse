@@ -103,3 +103,20 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - Aucune suggestion n'a été rejetée lors de cette phase.
+
+## Phase 4 – Products Service
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le plan d'implémentation de la logique métier du `ProductsService`.
+- Implémenter le filtrage et la pagination des produits en mémoire.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan d'implémentation généré (`phase_4_products_service_449b06c5.plan.md`) avant le développement.
+- Après validation du plan, j'ai demandé une modification afin de retirer les blocs `try/catch` et la gestion des exceptions, car cette responsabilité est traitée dans une phase dédiée (`Exception Handling`).
+- J'ai utilisé le plan mis à jour comme guide pour l'implémentation du service.
+
+### Ce que j'ai rejeté
+
+- J'ai rejeté l'ajout de blocs `try/catch` et de la gestion des exceptions dans le `ProductsService`, afin de conserver une séparation claire des responsabilités et de traiter les erreurs dans la phase dédiée aux filtres d'exceptions.
