@@ -7,12 +7,13 @@ interface ProductTableProps {
 }
 
 const headerCellClass =
-  'sticky top-0 z-10 bg-slate-50 px-4 py-3 font-semibold text-slate-600';
+  'sticky top-0 z-10 whitespace-nowrap bg-slate-50 px-4 py-3 font-semibold text-slate-600 sm:px-6';
+const cellClass = 'px-4 py-3 sm:px-6';
 
 function ProductTable({ products }: ProductTableProps) {
   if (products.length === 0) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-12">
         <p className="text-sm font-medium text-slate-700">No products found.</p>
         <p className="mt-1 text-sm text-slate-500">
           There are no products to display right now.
@@ -47,17 +48,21 @@ function ProductTable({ products }: ProductTableProps) {
           <tbody className="divide-y divide-slate-100">
             {products.map((product) => (
               <tr key={product.id} className="transition-colors hover:bg-slate-50">
-                <td className="px-4 py-3 font-medium text-slate-800">
+                <td className={`${cellClass} min-w-48 font-medium text-slate-800`}>
                   {product.name}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{product.category}</td>
-                <td className="px-4 py-3 text-right tabular-nums text-slate-700">
+                <td className={`${cellClass} whitespace-nowrap text-slate-600`}>
+                  {product.category}
+                </td>
+                <td
+                  className={`${cellClass} whitespace-nowrap text-right tabular-nums text-slate-700`}
+                >
                   {formatPrice(product.price)}
                 </td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className={`${cellClass} whitespace-nowrap text-slate-600`}>
                   {STOCK_STATUS_LABELS[product.stockStatus]}
                 </td>
-                <td className="px-4 py-3">
+                <td className={`${cellClass} whitespace-nowrap`}>
                   <StockStatusBadge status={product.stockStatus} />
                 </td>
               </tr>

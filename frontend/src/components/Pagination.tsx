@@ -38,7 +38,7 @@ function getPageItems(currentPage: number, totalPages: number): PageItem[] {
 }
 
 const baseButtonClass =
-  'inline-flex items-center justify-center gap-1 rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex items-center justify-center gap-1 rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50';
 const inactiveButtonClass =
   'border-slate-200 bg-white text-slate-700 hover:bg-slate-100';
 const activeButtonClass = 'border-slate-900 bg-slate-900 text-white';
@@ -69,7 +69,7 @@ function Pagination({
 
   return (
     <nav
-      className="flex items-center justify-between gap-3"
+      className="flex flex-wrap items-center justify-between gap-3 sm:justify-center"
       aria-label="Pagination"
     >
       <button

@@ -37,3 +37,9 @@ Après avoir implémenté l'affichage des produits, j'ai défini les exigences r
 Après avoir implémenté l'affichage et le filtrage des produits, j'ai défini les exigences de la pagination côté serveur, notamment les contrôles de navigation, la synchronisation avec l'API, la conservation des filtres actifs et les bonnes pratiques d'expérience utilisateur.
 
 À partir de ces exigences, j'ai utilisé l'IA pour générer le composant `Pagination`, intégrer la pagination avec le `ProductService` et concevoir une interface responsive avec Tailwind CSS, tout en respectant la séparation entre la logique métier et la couche de présentation.
+
+# Phase 5 — Responsive Design
+
+Après avoir implémenté les principales fonctionnalités du frontend, j'ai défini les exigences relatives au responsive design, notamment la vérification du rendu sur mobile, tablette et ordinateur, ainsi que l'utilisation des media queries de Tailwind CSS pour adapter l'interface aux différentes tailles d'écran.
+
+À partir de ces exigences, j'ai utilisé l'IA pour vérifier et ajuster les composants existants en appliquant les bonnes pratiques de responsive design avec les breakpoints (`sm`, `md`, `lg`, `xl`) et, lorsque nécessaire, les media queries de Tailwind CSS, tout en préservant la logique métier de l'application.
