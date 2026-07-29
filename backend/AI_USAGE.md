@@ -70,6 +70,7 @@ Create a `README.md` inside:
 
 - Générer le code de la phase 2 à partir de l'architecture que j'avais définie.
 - Implémenter le modèle de données (`Product`), l'énumération `StockStatus` et la source de données en mémoire conformément aux exigences du sujet.
+- Générer pour la phase 2 le fichier `products.data.ts` avec les données de produits initiales ( 20 produits )
 
 ### Comment j'ai utilisé les suggestions
 
@@ -79,6 +80,7 @@ Create a `README.md` inside:
   - `interfaces/`
   - `enums/`
 - J'ai utilisé le plan comme guide pour l'implémentation de cette phase.
+
 
 ### Ce que j'ai rejeté
 
