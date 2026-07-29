@@ -63,3 +63,23 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - Aucune suggestion n'a été rejetée lors de cette phase.
+
+## Phase 2 – Modèle de données des produits
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le code de la phase 2 à partir de l'architecture que j'avais définie.
+- Implémenter le modèle de données (`Product`), l'énumération `StockStatus` et la source de données en mémoire conformément aux exigences du sujet.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai validé le plan d'implémentation généré avant le développement.
+- J'ai conservé l'architecture que j'avais proposée, avec les dossiers :
+  - `data/`
+  - `interfaces/`
+  - `enums/`
+- J'ai utilisé le plan comme guide pour l'implémentation de cette phase.
+
+### Ce que j'ai rejeté
+
+- Aucune suggestion n'a été rejetée lors de cette phase.
