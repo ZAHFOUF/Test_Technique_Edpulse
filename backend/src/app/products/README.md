@@ -14,7 +14,7 @@ Feature module that owns everything related to the **Products** domain of the AP
 ## Current files
 
 - `products.module.ts` — declares the module, registers the controller and the service.
-- `products.controller.ts` — HTTP layer, injects `ProductsService`. No routes wired yet (added in a later phase).
+- `products.controller.ts` — HTTP layer, exposes `GET /products` and delegates to `ProductsService.findAll`.
 - `products.service.ts` — business logic: filtering and pagination against the in-memory data source.
 - `data/products.data.ts` — the in-memory `Product[]` acting as data source.
 - `dto/product-query.dto.ts` — `ProductQueryDto`, validates the `GET /products` query parameters.
@@ -22,6 +22,47 @@ Feature module that owns everything related to the **Products** domain of the AP
 - `interfaces/product.interface.ts` — the `Product` domain shape.
 - `interfaces/paginated-products.interface.ts` — the paginated response envelope
   returned by the service.
+
+## Controller responsibility (ProductsController)
+
+### Role
+
+The controller is the **HTTP surface** of the feature and nothing more:
+
+1. Declare the route (`@Controller('products')` + `@Get()`).
+2. Bind the incoming query string to `ProductQueryDto` via `@Query()`.
+3. Delegate to `productsService.findAll(query)`.
+4. Return the service's result unchanged.
+
+The handler is a single expression:
+
+```ts
+@Get()
+findAll(@Query() query: ProductQueryDto): PaginatedProducts {
+  return this.productsService.findAll(query);
+}
+```
+
+### Why controllers should remain thin
+
+- **Separation of concerns** — transport (HTTP, routing, DTO binding) and
+  domain (filtering, pagination, defaults) live in different layers and
+  evolve independently.
+- **Testability** — the service is trivial to unit-test in isolation; the
+  controller has almost no logic left to test.
+- **Reusability** — the same `ProductsService` could back another
+  transport (a second controller, a GraphQL resolver, a CLI, a scheduled
+  job) without any change.
+- **Single Responsibility Principle** — the controller has one reason to
+  change: the HTTP contract. Business rule changes never touch it.
+
+### Collaboration with the service
+
+The controller does not know how filtering, pagination, or default values
+work. It simply hands the validated `ProductQueryDto` to
+`productsService.findAll(query)` and forwards the returned
+`PaginatedProducts` envelope. Any change to filtering or pagination policy
+happens inside the service without touching the controller.
 
 ## Business logic (ProductsService)
 
@@ -63,13 +104,13 @@ These are **business decisions**, not transport concerns:
 
 ## Files added in future phases
 
-- Global `ValidationPipe` wiring in `main.ts` and the `GET /products`
-  route in the controller to expose the service via HTTP.
+- Global `ValidationPipe` in `main.ts` so `ProductQueryDto`'s decorators
+  actually coerce and validate query parameters at runtime.
 - Cache integration (via `src/cache/`) so identical requests reuse a
   previous response.
 - Global exception filter (via `src/common/filters/`) for consistent
   error responses.
-- Unit tests for the service.
+- Unit tests for the service and the controller.
 
 ## Why this separation improves maintainability
 

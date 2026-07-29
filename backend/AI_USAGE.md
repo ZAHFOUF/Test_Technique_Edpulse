@@ -120,3 +120,21 @@ Create a `README.md` inside:
 ### Ce que j'ai rejeté
 
 - J'ai rejeté l'ajout de blocs `try/catch` et de la gestion des exceptions dans le `ProductsService`, afin de conserver une séparation claire des responsabilités et de traiter les erreurs dans la phase dédiée aux filtres d'exceptions.
+
+
+## Phase 5 – Products Controller
+
+### Ce que j'ai demandé à Cursor (Plan Mode)
+
+- Générer le plan d'implémentation du `ProductsController`.
+- Implémenter l'endpoint `GET /products` en déléguant toute la logique métier au `ProductsService`.
+
+### Comment j'ai utilisé les suggestions
+
+- J'ai revu et validé le plan d'implémentation généré (`phase_5_products_controller_9476d412.plan.md`) avant le développement.
+- Le plan suggérait d'activer le `ValidationPipe` global. J'ai choisi de reporter cette configuration à une phase dédiée (`Exception Handling`) afin de conserver une séparation claire des responsabilités.
+- J'ai utilisé le reste du plan comme guide pour implémenter le contrôleur.
+
+### Ce que j'ai rejeté
+
+- Je n'ai pas activé le `ValidationPipe` durant cette phase. Cette configuration sera réalisée dans la phase dédiée à la validation globale et à la gestion des exceptions.
